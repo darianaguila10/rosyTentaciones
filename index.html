@@ -7,8 +7,6 @@
     <title>Catálogo de Pasteles</title>
     <link rel='stylesheet' href="css/fontawesome/css/all.min.css">
     <style>
-        /* (Todo el CSS lo mantengo igual que el tuyo original) */
-        
         * {
             box-sizing: border-box;
             margin: 0;
@@ -69,6 +67,12 @@
             padding: 15px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
             text-align: center;
+            cursor: pointer;
+            transition: transform 0.2s ease;
+        }
+        
+        .producto:hover {
+            transform: scale(1.03);
         }
         
         .producto img {
@@ -79,11 +83,6 @@
         .producto h3 {
             margin: 10px 0 5px 0;
             font-size: 18px;
-            text-align: start;
-        }
-        
-        .producto p {
-            margin: 5px 0;
             text-align: start;
         }
         
@@ -144,6 +143,7 @@
             display: flex;
             align-items: center;
             gap: 10px;
+            cursor: pointer;
         }
         
         #total {
@@ -189,6 +189,7 @@
             padding-top: 4px;
             display: flex;
             justify-content: space-between;
+            align-items: center;
         }
         
         #price strong {
@@ -197,19 +198,98 @@
         }
         
         .description {
-            color: #0b0b0b5c;
+            color: #0b0b0ba9;
+        }
+        /* Estilos del diálogo */
+        
+        .dialogo {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.4);
+            backdrop-filter: blur(5px);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 2000;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+        
+        .dialogo.mostrar {
+            opacity: 1;
+            pointer-events: all;
+        }
+        
+        .dialogo-contenido {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            display: flex;
+            gap: 15px;
+            max-width: 600px;
+            width: 90%;
+            transform: scale(0.95);
+            transition: transform 0.3s ease;
+        }
+        
+        .dialogo.mostrar .dialogo-contenido {
+            transform: scale(1);
+        }
+        
+        .dialogo-contenido img {
+            width: 150px;
+            height: 150px;
+            border-radius: 10px;
+            object-fit: cover;
+        }
+        
+        .dialogo-texto h3 {
+            margin-bottom: 8px;
+        }
+        
+        .dialogo-texto p {
+            margin-bottom: 10px;
+        }
+        
+        .dialogo-botones {
+            margin-top: 10px;
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+        }
+        
+        .dialogo-botones button {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+        
+        .btn-cancelar {
+            background: #ccc;
+            color: black;
+        }
+        
+        .btn-agregar {
+            background: #ff4081;
+            color: white;
+        }
+        
+        .btn-eliminar {
+            background: red;
+            color: white;
         }
         
         .eliminar-btn {
             background: transparent;
             border: none;
-            color: red;
+            color: #888;
             font-size: 16px;
             cursor: pointer;
-        }
-        
-        .cart-btn i {
-            font-size: 18px;
         }
     </style>
 </head>
@@ -223,36 +303,7 @@
     </button>
     </header>
 
-    <div class="catalogo" id="catalogo">
-        <div class="producto">
-            <img src="https://encrypted-tbn0.gstatic.com/shopping?q=tbn:ANd9GcTWRz6zp4oopHCIfw83SovQER62UDMX_qJBTDqSXwBNzVaJvPdD2MXM5McC0Hc9yWD_tgKRrwHyvLozZUcg1opvpjTWmF_fkBEiF8mLfDODB1yzErMpodCGzkMFRbr8DhsVapN0lg&usqp=CAc" alt="Pastel de Chocolate" />
-            <h3>Pastel de Chocolate</h3>
-            <p class="description">Bizcocho suave con cobertura de chocolate amargo.</p>
-            <div id="price">
-                <strong>$15.00</strong>
-                <button onclick="agregarAlCarrito('Pastel de Chocolate', 15, 'https://encrypted-tbn0.gstatic.com/shopping?q=tbn:ANd9GcTWRz6zp4oopHCIfw83SovQER62UDMX_qJBTDqSXwBNzVaJvPdD2MXM5McC0Hc9yWD_tgKRrwHyvLozZUcg1opvpjTWmF_fkBEiF8mLfDODB1yzErMpodCGzkMFRbr8DhsVapN0lg&usqp=CAc')"> <i class="fa-solid fa-plus"></i> Agregar</button>
-            </div>
-        </div>
-
-        <div class="producto">
-            <img src="https://encrypted-tbn0.gstatic.com/shopping?q=tbn:ANd9GcTWRz6zp4oopHCIfw83SovQER62UDMX_qJBTDqSXwBNzVaJvPdD2MXM5McC0Hc9yWD_tgKRrwHyvLozZUcg1opvpjTWmF_fkBEiF8mLfDODB1yzErMpodCGzkMFRbr8DhsVapN0lg&usqp=CAc" alt="Pastel de Chocolate" />
-            <h3>Pastel de Chocolate</h3>
-            <p class="description">Bizcocho suave con cobertura de chocolate amargo.</p>
-            <div id="price">
-                <strong>$15.00</strong>
-                <button onclick="agregarAlCarrito('Pastel de Chocolate', 15, 'https://encrypted-tbn0.gstatic.com/shopping?q=tbn:ANd9GcTWRz6zp4oopHCIfw83SovQER62UDMX_qJBTDqSXwBNzVaJvPdD2MXM5McC0Hc9yWD_tgKRrwHyvLozZUcg1opvpjTWmF_fkBEiF8mLfDODB1yzErMpodCGzkMFRbr8DhsVapN0lg&usqp=CAc')"> <i class="fa-solid fa-plus"></i> Agregar</button>
-            </div>
-        </div>
-        <div class="producto">
-            <img src="https://encrypted-tbn0.gstatic.com/shopping?q=tbn:ANd9GcTWRz6zp4oopHCIfw83SovQER62UDMX_qJBTDqSXwBNzVaJvPdD2MXM5McC0Hc9yWD_tgKRrwHyvLozZUcg1opvpjTWmF_fkBEiF8mLfDODB1yzErMpodCGzkMFRbr8DhsVapN0lg&usqp=CAc" alt="Pastel de Chocolate" />
-            <h3>Pastel de Chocolate</h3>
-            <p class="description">Bizcocho suave con cobertura de chocolate amargo.</p>
-            <div id="price">
-                <strong>$15.00</strong>
-                <button onclick="agregarAlCarrito('Pastel de Chocolate', 15, 'https://encrypted-tbn0.gstatic.com/shopping?q=tbn:ANd9GcTWRz6zp4oopHCIfw83SovQER62UDMX_qJBTDqSXwBNzVaJvPdD2MXM5McC0Hc9yWD_tgKRrwHyvLozZUcg1opvpjTWmF_fkBEiF8mLfDODB1yzErMpodCGzkMFRbr8DhsVapN0lg&usqp=CAc')"> <i class="fa-solid fa-plus"></i> Agregar</button>
-            </div>
-        </div>
-    </div>
+    <div class="catalogo" id="catalogo"></div>
 
     <div id="lista-carrito">
         <header>
@@ -266,14 +317,106 @@
 
     <button id="floating-cart-btn" onclick="toggleCarrito()">Ver Pedido</button>
 
+    <!-- Aquí se inyectarán los diálogos -->
+    <div id="dialogo"></div>
+
     <script>
+        const cakes = [{
+            nombre: "Cake de vainilla",
+            descripcion: "⌀ 22 cm y 10 cm de altura.<br><br> Bizcocho genovés con relleno de dulce de leche artesanal y cobertura de merengue.",
+            precio: 8,
+            imagen: "https://encrypted-tbn0.gstatic.com/shopping?q=tbn:ANd9GcTWRz6zp4oopHCIfw83SovQER62UDMX_qJBTDqSXwBNzVaJvPdD2MXM5McC0Hc9yWD_tgKRrwHyvLozZUcg1opvpjTWmF_fkBEiF8mLfDODB1yzErMpodCGzkMFRbr8DhsVapN0lg&usqp=CAc"
+        }, {
+            nombre: "Cake de chocolate",
+            descripcion: "Bizcocho genovés de chocolate relleno de dulce de leche artesanal. Decorado con merengue y cobertura de chocolate. ⌀ 22 cm y 10 cm de altura.",
+            precio: 10,
+            imagen: "https://encrypted-tbn0.gstatic.com/shopping?q=tbn:ANd9GcTWRz6zp4oopHCIfw83SovQER62UDMX_qJBTDqSXwBNzVaJvPdD2MXM5McC0Hc9yWD_tgKRrwHyvLozZUcg1opvpjTWmF_fkBEiF8mLfDODB1yzErMpodCGzkMFRbr8DhsVapN0lg&usqp=CAc"
+        }];
+
         const carrito = [];
 
+        function renderCatalogo() {
+            const catalogo = document.getElementById("catalogo");
+            catalogo.innerHTML = "";
+
+            cakes.forEach((cake, index) => {
+                const div = document.createElement("div");
+                div.className = "producto";
+                div.onclick = () => mostrarDialogo(index);
+
+                div.innerHTML = `
+          <img src="${cake.imagen}" alt="${cake.nombre}" />
+          <h3>${cake.nombre}</h3>
+          <div id="price">
+            <strong>$${cake.precio.toFixed(2)} USD</strong>
+            <button onclick="event.stopPropagation(); mostrarDialogo(${index})">
+              <i class="fa-solid fa-plus"></i> Agregar
+            </button>
+          </div>
+        `;
+                catalogo.appendChild(div);
+            });
+        }
+
+        function mostrarDialogo(index) {
+            const cake = cakes[index];
+            const dialogo = document.getElementById("dialogo");
+
+            dialogo.innerHTML = `
+        <div class="dialogo mostrar" onclick="cerrarDialogo(event)">
+          <div class="dialogo-contenido" onclick="event.stopPropagation()">
+            <img src="${cake.imagen}" alt="${cake.nombre}" />
+            <div class="dialogo-texto">
+              <h3>${cake.nombre}</h3>
+              <p class='description'>${cake.descripcion}</p>
+              <strong>$${cake.precio.toFixed(2)} USD</strong>
+              <div class="dialogo-botones">
+                <button class="btn-cancelar" onclick="cerrarDialogo()">Cancelar</button>
+                <button class="btn-agregar" onclick="agregarAlCarrito('${cake.nombre}', ${cake.precio}, '${cake.imagen}'); cerrarDialogo()">Añadir</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      `;
+        }
+
+        // Diálogo para eliminar - ahora incluye la descripción
+        function mostrarDialogoEliminar(index) {
+            const item = carrito[index];
+            const dialogo = document.getElementById("dialogo");
+
+            dialogo.innerHTML = `
+        <div class="dialogo mostrar" onclick="cerrarDialogo(event)">
+          <div class="dialogo-contenido" onclick="event.stopPropagation()">
+            <img src="${item.imagen}" alt="${item.nombre}" />
+            <div class="dialogo-texto">
+              <h3>${item.nombre}</h3>
+              <p class='description'>${item.descripcion || ""}</p>
+              <strong>$${item.precio.toFixed(2)} USD</strong>
+              <div class="dialogo-botones">
+                <button class="btn-cancelar" onclick="cerrarDialogo()">Cancelar</button>
+                <button class="btn-eliminar" onclick="eliminarDelCarrito(${index}); cerrarDialogo()">Eliminar</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      `;
+        }
+
+        function cerrarDialogo(e) {
+            if (e && e.target !== e.currentTarget) return;
+            document.getElementById("dialogo").innerHTML = "";
+        }
+
+        // Al agregar, ahora se guarda también la descripción buscando el producto por nombre
         function agregarAlCarrito(nombre, precio, imagen) {
+            const found = cakes.find(c => c.nombre === nombre);
+            const descripcion = found ? found.descripcion : "";
             carrito.push({
                 nombre,
                 precio,
-                imagen
+                imagen,
+                descripcion
             });
             actualizarCarrito();
         }
@@ -295,27 +438,14 @@
                 totalPago += item.precio;
 
                 const li = document.createElement('li');
-
-                const img = document.createElement('img');
-                img.src = item.imagen;
-                img.alt = item.nombre;
-                img.style.width = '40px';
-                img.style.height = '40px';
-                img.style.borderRadius = '6px';
-                img.style.objectFit = 'cover';
-
-                const span = document.createElement('span');
-                span.textContent = `${item.nombre} - $${item.precio.toFixed(2)}`;
-                span.style.flexGrow = '1';
-
-                const btn = document.createElement('button');
-                btn.className = 'eliminar-btn';
-                btn.innerHTML = '<i class="fa-solid fa-trash"></i>';
-                btn.onclick = () => eliminarDelCarrito(index);
-
-                li.appendChild(img);
-                li.appendChild(span);
-                li.appendChild(btn);
+                li.onclick = () => mostrarDialogoEliminar(index); // abre el diálogo de eliminar al tocar el item
+                li.innerHTML = `
+          <img src="${item.imagen}" alt="${item.nombre}" style="width:40px;height:40px;border-radius:6px;object-fit:cover;">
+          <span style="flex-grow:1;">${item.nombre} - $${item.precio.toFixed(2)}</span>
+          <button class="eliminar-btn" onclick="event.stopPropagation(); eliminarDelCarrito(${index})">
+            <i class="fa-solid fa-trash"></i>
+          </button>
+        `;
                 lista.appendChild(li);
             });
 
@@ -324,16 +454,18 @@
         }
 
         function toggleCarrito() {
-            const panel = document.getElementById('lista-carrito');
-            panel.classList.toggle('abierto');
+            document.getElementById('lista-carrito').classList.toggle('abierto');
         }
 
         function enviarWhatsapp() {
-            const mensaje = encodeURIComponent('Hola, quiero pedir:\n' +
-                carrito.map(p => `- ${p.nombre} - $${p.precio.toFixed(2)}`).join('\n'));
-            const url = `https://wa.me/?text=${mensaje}`;
-            window.open(url, '_blank');
+            const mensaje = encodeURIComponent(
+                'Hola, quiero pedir:\n' +
+                carrito.map(p => `- ${p.nombre} - $${p.precio.toFixed(2)}`).join('\n')
+            );
+            window.open(`https://wa.me/?text=${mensaje}`, '_blank');
         }
+
+        document.addEventListener("DOMContentLoaded", renderCatalogo);
     </script>
 </body>
 
