@@ -76,8 +76,9 @@
         }
         
         .producto img {
-            max-width: 100%;
+            height: 200px;
             border-radius: 10px;
+            align-self: center;
         }
         
         .producto h3 {
@@ -122,10 +123,6 @@
             justify-content: space-between;
             align-items: center;
             margin-bottom: 10px;
-        }
-        
-        #lista-carrito h2 {
-            margin: 0;
         }
         
         #carrito-lista {
@@ -200,7 +197,7 @@
         .description {
             color: #0b0b0ba9;
         }
-        /* Estilos del diálogo */
+        /* Diálogo */
         
         .dialogo {
             position: fixed;
@@ -229,36 +226,50 @@
             border-radius: 12px;
             padding: 20px;
             display: flex;
+            flex-direction: column;
+            align-items: left;
+            text-align: left;
             gap: 15px;
-            max-width: 600px;
+            max-width: 400px;
             width: 90%;
             transform: scale(0.95);
-            transition: transform 0.3s ease;
+            animation: fadeInScale 0.3s ease forwards;
         }
         
-        .dialogo.mostrar .dialogo-contenido {
-            transform: scale(1);
+        @keyframes fadeInScale {
+            from {
+                opacity: 0;
+                transform: scale(0.85);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
         }
         
         .dialogo-contenido img {
-            width: 150px;
-            height: 150px;
+            width: 220px;
+            height: 220px;
             border-radius: 10px;
+            display: flex;
+            align-self: center;
             object-fit: cover;
         }
         
         .dialogo-texto h3 {
             margin-bottom: 8px;
+            font-size: 20px;
         }
         
         .dialogo-texto p {
-            margin-bottom: 10px;
+            color: #555;
+            margin: 10px 0;
         }
         
         .dialogo-botones {
             margin-top: 10px;
             display: flex;
-            justify-content: flex-end;
+            justify-content: center;
             gap: 10px;
         }
         
@@ -291,6 +302,20 @@
             font-size: 16px;
             cursor: pointer;
         }
+        
+        .producto .dimensiones {
+            font-size: 14px;
+            color: #444;
+            text-align: start;
+            margin: 5px 0 0px 0;
+            display: flex;
+            gap: 12px;
+        }
+        
+        .producto .dimensiones i {
+            color: #ff4081;
+            margin-right: 4px;
+        }
     </style>
 </head>
 
@@ -317,21 +342,35 @@
 
     <button id="floating-cart-btn" onclick="toggleCarrito()">Ver Pedido</button>
 
-    <!-- Aquí se inyectarán los diálogos -->
+    <!-- Contenedor de diálogos -->
     <div id="dialogo"></div>
 
     <script>
-        const cakes = [{
-            nombre: "Cake de vainilla",
-            descripcion: "⌀ 22 cm y 10 cm de altura.<br><br> Bizcocho genovés con relleno de dulce de leche artesanal y cobertura de merengue.",
-            precio: 8,
-            imagen: "https://encrypted-tbn0.gstatic.com/shopping?q=tbn:ANd9GcTWRz6zp4oopHCIfw83SovQER62UDMX_qJBTDqSXwBNzVaJvPdD2MXM5McC0Hc9yWD_tgKRrwHyvLozZUcg1opvpjTWmF_fkBEiF8mLfDODB1yzErMpodCGzkMFRbr8DhsVapN0lg&usqp=CAc"
-        }, {
-            nombre: "Cake de chocolate",
-            descripcion: "Bizcocho genovés de chocolate relleno de dulce de leche artesanal. Decorado con merengue y cobertura de chocolate. ⌀ 22 cm y 10 cm de altura.",
-            precio: 10,
-            imagen: "https://encrypted-tbn0.gstatic.com/shopping?q=tbn:ANd9GcTWRz6zp4oopHCIfw83SovQER62UDMX_qJBTDqSXwBNzVaJvPdD2MXM5McC0Hc9yWD_tgKRrwHyvLozZUcg1opvpjTWmF_fkBEiF8mLfDODB1yzErMpodCGzkMFRbr8DhsVapN0lg&usqp=CAc"
-        }];
+        const cakes = [
+
+            {
+                nombre: "Cake de vainilla",
+                descripcion: "Bizcocho genovés con relleno de dulce de leche artesanal y cobertura de merengue.",
+                precio: 8,
+                ancho: 22,
+                alto: 12,
+                imagen: "../images/v2.jpg",
+            }, {
+                nombre: "Cake de vainilla",
+                descripcion: "Bizcocho genovés con relleno de dulce de leche artesanal y cobertura de merengue.",
+                precio: 8,
+                ancho: 22,
+                alto: 12,
+                imagen: "../images/v2.jpg",
+            }, {
+                nombre: "Cake de chocolate",
+                descripcion: "Bizcocho genovés de chocolate relleno de dulce de leche artesanal. Decorado con merengue y cobertura de chocolate.",
+                ancho: 22,
+                alto: 12,
+                precio: 10,
+                imagen: "../images/v3.jpg",
+            }
+        ];
 
         const carrito = [];
 
@@ -347,6 +386,10 @@
                 div.innerHTML = `
           <img src="${cake.imagen}" alt="${cake.nombre}" />
           <h3>${cake.nombre}</h3>
+          <div class="dimensiones">
+            <span><i class="fa-solid fa-arrows-left-right"></i> ${cake.ancho} cm</span>
+            <span><i class="fa-solid fa-arrows-up-down"></i> ${cake.alto} cm</span>
+          </div>
           <div id="price">
             <strong>$${cake.precio.toFixed(2)} USD</strong>
             <button onclick="event.stopPropagation(); mostrarDialogo(${index})">
@@ -368,6 +411,10 @@
             <img src="${cake.imagen}" alt="${cake.nombre}" />
             <div class="dialogo-texto">
               <h3>${cake.nombre}</h3>
+              <div class="dimensiones" style="justify-content:center;">
+                <span><i class="fa-solid fa-arrows-left-right"></i> ${cake.ancho} cm</span>
+                <span><i class="fa-solid fa-arrows-up-down"></i> ${cake.alto} cm</span>
+              </div>
               <p class='description'>${cake.descripcion}</p>
               <strong>$${cake.precio.toFixed(2)} USD</strong>
               <div class="dialogo-botones">
@@ -380,7 +427,6 @@
       `;
         }
 
-        // Diálogo para eliminar - ahora incluye la descripción
         function mostrarDialogoEliminar(index) {
             const item = carrito[index];
             const dialogo = document.getElementById("dialogo");
@@ -408,7 +454,6 @@
             document.getElementById("dialogo").innerHTML = "";
         }
 
-        // Al agregar, ahora se guarda también la descripción buscando el producto por nombre
         function agregarAlCarrito(nombre, precio, imagen) {
             const found = cakes.find(c => c.nombre === nombre);
             const descripcion = found ? found.descripcion : "";
@@ -431,14 +476,12 @@
             const lista = document.getElementById('carrito-lista');
             const total = document.getElementById('total');
             lista.innerHTML = '';
-
             let totalPago = 0;
 
             carrito.forEach((item, index) => {
                 totalPago += item.precio;
-
                 const li = document.createElement('li');
-                li.onclick = () => mostrarDialogoEliminar(index); // abre el diálogo de eliminar al tocar el item
+                li.onclick = () => mostrarDialogoEliminar(index);
                 li.innerHTML = `
           <img src="${item.imagen}" alt="${item.nombre}" style="width:40px;height:40px;border-radius:6px;object-fit:cover;">
           <span style="flex-grow:1;">${item.nombre} - $${item.precio.toFixed(2)}</span>
@@ -462,7 +505,7 @@
                 'Hola, quiero pedir:\n' +
                 carrito.map(p => `- ${p.nombre} - $${p.precio.toFixed(2)}`).join('\n')
             );
-            window.open(`https://wa.me/?text=${mensaje}`, '_blank');
+            window.open(`https://wa.me/+5354010233?text=${mensaje}`, '_blank');
         }
 
         document.addEventListener("DOMContentLoaded", renderCatalogo);
